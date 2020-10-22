@@ -62,10 +62,10 @@ class SearchProblem:
 
 # Nos de uma arvore de pesquisa
 class SearchNode:
-    def __init__(self,state,parent, depth): 
+    def __init__(self,state,parent): 
         self.state = state
         self.parent = parent
-        self.depth = depth
+        self.depth = self.parent.depth + 1 if self.parent != None else 0     # 1.2 
     def __str__(self):
         return "no(" + str(self.state) + "," + str(self.parent) + ")"
     def __repr__(self):
@@ -77,7 +77,7 @@ class SearchTree:
     # construtor
     def __init__(self,problem, strategy='breadth'): 
         self.problem = problem
-        root = SearchNode(problem.initial, None, 0)
+        root = SearchNode(problem.initial, None)
         self.open_nodes = [root]
         self.strategy = strategy
 
@@ -90,21 +90,30 @@ class SearchTree:
         return(path)
 
     # procurar a solucao
-    def search(self):
+    def search(self, limit = None):
+
+        Terminal = 0
+
         while self.open_nodes != []:
             node = self.open_nodes.pop(0)
             if self.problem.goal_test(node.state):
+                self.solution = node        # 1.3, estranho, python deixa criar atributos de classe fora do construtor
                 return self.get_path(node)
+            if not limit == None and node.depth > limit:      # 1.4
+                terminal = terminal + 1
+                continue
             lnewnodes = []
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
-                if newstate not in self.get_path(node):         # evitar ciclos, evitar que o algoritmo registe um nó com um state pelo qual já estivemos
-                    newnode = SearchNode(newstate,node, len(self.get_path(node) + 1))
+                if newstate not in self.get_path(node):         # 1.1, evitar ciclos, evitar que o algoritmo registe um nó com um state pelo qual já estivemos
+                    newnode = SearchNode(newstate,node)
                     lnewnodes.append(newnode)
             self.add_to_open(lnewnodes)
+
+        self.num_terminal
         return None
 
-    # juntar novos nos a lista de nos abertos de acordo com a estrategia
+    # juntar novos nos a lista de nós abertos de acordo com a estrategia
     def add_to_open(self,lnewnodes):
         if self.strategy == 'breadth':
             self.open_nodes.extend(lnewnodes)
