@@ -62,9 +62,10 @@ class SearchProblem:
 
 # Nos de uma arvore de pesquisa
 class SearchNode:
-    def __init__(self,state,parent): 
+    def __init__(self,state,parent, depth): 
         self.state = state
         self.parent = parent
+        self.depth = depth
     def __str__(self):
         return "no(" + str(self.state) + "," + str(self.parent) + ")"
     def __repr__(self):
@@ -76,7 +77,7 @@ class SearchTree:
     # construtor
     def __init__(self,problem, strategy='breadth'): 
         self.problem = problem
-        root = SearchNode(problem.initial, None)
+        root = SearchNode(problem.initial, None, 0)
         self.open_nodes = [root]
         self.strategy = strategy
 
@@ -97,8 +98,9 @@ class SearchTree:
             lnewnodes = []
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
-                newnode = SearchNode(newstate,node)
-                lnewnodes.append(newnode)
+                if newstate not in self.get_path(node):         # evitar ciclos, evitar que o algoritmo registe um nó com um state pelo qual já estivemos
+                    newnode = SearchNode(newstate,node, len(self.get_path(node) + 1))
+                    lnewnodes.append(newnode)
             self.add_to_open(lnewnodes)
         return None
 
