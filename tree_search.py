@@ -92,25 +92,36 @@ class SearchTree:
     # procurar a solucao
     def search(self, limit = None):
 
-        Terminal = 0
+        terminal = 0
+        no_terminal = 0
 
         while self.open_nodes != []:
             node = self.open_nodes.pop(0)
+
             if self.problem.goal_test(node.state):
                 self.solution = node        # 1.3, estranho, python deixa criar atributos de classe fora do construtor
                 return self.get_path(node)
-            if not limit == None and node.depth > limit:      # 1.4
-                terminal = terminal + 1
+
+            if not limit == None and node.depth >= limit:      # 1.4
+                terminal = terminal + 1                        # 1.5
                 continue
+
             lnewnodes = []
+            
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
                 if newstate not in self.get_path(node):         # 1.1, evitar ciclos, evitar que o algoritmo registe um nó com um state pelo qual já estivemos
                     newnode = SearchNode(newstate,node)
                     lnewnodes.append(newnode)
+            # 1.5
+            if a == None:
+                terminal = terminal + 1
+            else:
+                no_terminal = no_terminal + 1
+            
             self.add_to_open(lnewnodes)
 
-        self.num_terminal
+        self.terminals = terminal
         return None
 
     # juntar novos nos a lista de nós abertos de acordo com a estrategia
@@ -121,4 +132,7 @@ class SearchTree:
             self.open_nodes[:0] = lnewnodes
         elif self.strategy == 'uniform':
             pass
+
+    def length(self):
+        return self.solution.depth
 
