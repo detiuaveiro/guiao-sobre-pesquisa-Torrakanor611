@@ -14,17 +14,17 @@ def test_exercicio8(braga_faro):
     t = SearchTree(braga_faro, 'depth')
 
     assert t.search() == ['Braga', 'Porto', 'Agueda', 'Aveiro', 'Coimbra', 'Leiria', 'Castelo Branco', 'Santarem', 'Lisboa', 'Evora', 'Beja', 'Faro']
-    assert t.solution.cost == 147 
+    assert t.solution.cost == 1104 
 
 def test_exercicio9(braga_faro):
     t = SearchTree(braga_faro, 'depth')
 
     assert t.search() == ['Braga', 'Porto', 'Agueda', 'Aveiro', 'Coimbra', 'Leiria', 'Castelo Branco', 'Santarem', 'Lisboa', 'Evora', 'Beja', 'Faro']
-    assert t.cost == 147 
+    assert t.cost == 1104 
 
 def test_exercicio10(braga_faro):
     t = SearchTree(braga_faro, 'uniform')
 
     assert t.search() == ['Braga', 'Guimaraes', 'Porto', 'Aveiro', 'Agueda', 'Coimbra', 'Figueira', 'Leiria', 'Santarem', 'Evora', 'Beja', 'Faro'] 
-    assert t.cost == 147
+    assert t.cost == 1104
     assert t.length == 11 
