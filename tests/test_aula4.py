@@ -25,6 +25,6 @@ def test_exercicio9(braga_faro):
 def test_exercicio10(braga_faro):
     t = SearchTree(braga_faro, 'uniform')
 
-    assert t.search() == ['Braga', 'Guimaraes', 'Porto', 'Aveiro', 'Agueda', 'Coimbra', 'Figueira', 'Leiria', 'Santarem', 'Evora', 'Beja', 'Faro'] 
-    assert t.cost == 1104
-    assert t.length == 11 
+    assert t.search() == ['Braga', 'Porto', 'Agueda', 'Coimbra', 'Leiria', 'Santarem', 'Evora', 'Beja', 'Faro'] 
+    assert t.cost == 706 
+    assert t.length == 8 
