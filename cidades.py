@@ -28,8 +28,15 @@ class Cidades(SearchDomain):
         (C1,C2) = action
         if C1==city:
             return C2
+            
     def cost(self, city, action):
-        pass
+        (C1,C2) = action
+        for pair in self.connections:
+            # print(pair)
+            if C1 == pair[0] and C2 == pair[1] or C1 == pair[1] and C2 == pair[0]:
+                    return pair[2]
+        return None
+
     def heuristic(self, city, goal_city):
         pass
     def satisfies(self, city, goal_city):

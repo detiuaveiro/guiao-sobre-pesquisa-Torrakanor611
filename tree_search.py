@@ -66,7 +66,7 @@ class SearchNode:
         self.state = state
         self.parent = parent
         self.depth = self.parent.depth + 1 if self.parent != None else 0     # 1.2
-        self.cost = 0
+        self.cost = 0   # 1.7
     def __str__(self):
         return "no(" + str(self.state) + "," + str(self.parent) + ")"
     def __repr__(self):
@@ -81,8 +81,10 @@ class SearchTree:
         root = SearchNode(problem.initial, None)
         self.open_nodes = [root]
         self.strategy = strategy
-        self.terminals = 1
+        self.length = 0
+        self.terminals = 0
         self.non_terminals = 0
+        self.cost = 0       # 1.9
 
     # obter o caminho (sequencia de estados) da raiz ate um no
     def get_path(self,node):
@@ -99,7 +101,10 @@ class SearchTree:
             node = self.open_nodes.pop(0)
             if self.problem.goal_test(node.state):
                 self.solution = node        # 1.3, estranho, python deixa criar atributos de classe fora do construtor
+                self.length = self.solution.depth
                 self.avg_ramification = (self.terminals + self.non_terminals -1) / self.non_terminals       # 1.6
+                self.cost = self.solution.cost  # 1.9
+                # print(self.get_path(node))
                 return self.get_path(node)
 
             if not limit == None and node.depth >= limit:      # 1.4
@@ -109,12 +114,16 @@ class SearchTree:
             self.non_terminals += 1
             self.terminals -= 1
             for a in self.problem.domain.actions(node.state):
-                newstate = self.problem.domain.result(node.state,a)
+                newstate = self.problem.domain.result(node.state, a)
                 if newstate not in self.get_path(node):         # 1.1, evitar ciclos, evitar que o algoritmo registe um nó com um state pelo qual já estivemos
+                    # print(newstate)
+                    # print(a)
                     newnode = SearchNode(newstate,node)
-                    # newnode.cost = self.problem.domain.cost()
+                    # print(newnode)
+                    newnode.cost = node.cost + self.problem.domain.cost(node.state, a) # 1.8
                     lnewnodes.append(newnode)
                     self.terminals += 1     # 1.5
+            print(lnewnodes)
             self.add_to_open(lnewnodes)
         return None
 
@@ -124,9 +133,11 @@ class SearchTree:
             self.open_nodes.extend(lnewnodes)
         elif self.strategy == 'depth':
             self.open_nodes[:0] = lnewnodes
-        elif self.strategy == 'uniform':
-            pass
+        elif self.strategy == 'uniform': # objectivo, manter os open_nodes, os nós abertos, ordenados pelo menor caminho
+            self.open_nodes.extend(lnewnodes)
 
-    def length(self):
-        return self.solution.depth
+            sorted
+
+
+
 
