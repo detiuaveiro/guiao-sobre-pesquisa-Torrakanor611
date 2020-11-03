@@ -25,4 +25,4 @@ def test_exercicio13(braga_faro):
     assert t.search() == ['Braga', 'Porto', 'Agueda', 'Coimbra', 'Leiria', 'Santarem', 'Evora', 'Beja', 'Faro'] 
     assert t.cost == 706 
     assert t.length == 8
-	assert round(t.avg_ramification,2) == 2.67
+	assert round(t.avg_branching,2) == round((17+8-1)/8, 2)
