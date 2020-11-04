@@ -28,3 +28,8 @@ def test_exercicio10(braga_faro):
     assert t.search() == ['Braga', 'Porto', 'Agueda', 'Coimbra', 'Leiria', 'Santarem', 'Evora', 'Beja', 'Faro'] 
     assert t.cost == 706 
     assert t.length == 8 
+
+# my tests
+def test_exercicio13(braga_faro):
+    t = SearchTree(braga_faro, 'greedy')
+    print(t.search())

@@ -12,6 +12,9 @@
 
 from tree_search import *
 
+# mine
+import math
+
 class Cidades(SearchDomain):
     def __init__(self,connections, coordinates):
         self.connections = connections
@@ -37,8 +40,19 @@ class Cidades(SearchDomain):
                     return pair[2]
         return None
 
+    # 1.12
     def heuristic(self, city, goal_city):
-        pass
+        
+        cost = self.cost(city, (city, goal_city))
+
+        if cost == None:
+            city_coords = self.coordinates[city]
+            goal_city_coords = self.coordinates[goal_city]
+            return math.sqrt((goal_city_coords[1] - city_coords[1])**2 + (goal_city_coords[0] - city_coords[0])**2)
+        else:
+            return cost
+
+
     def satisfies(self, city, goal_city):
         return goal_city==city
 
@@ -110,9 +124,21 @@ cidades_portugal = Cidades(
 
 
 p = SearchProblem(cidades_portugal,'Braga','Faro')
-t = SearchTree(p,'breadth')
 
-print(t.search())
+t = SearchTree(p,'breadth')
+print("breath:" + str(t.search()))
+print("cost: " + str(t.cost))
+print("terminal nodes:" + str(t.terminals))
+
+print("\n")
+
+t = SearchTree(p, 'greedy')
+print("greedy:" + str(t.search()))
+print("cost: " + str(t.cost))
+print("terminal nodes:" + str(t.terminals))
+
+# dúvida interpretar os resultados, mesmo caminho, cost diferente?
+
 
 
 # Atalho para obter caminho de c1 para c2 usando strategy:

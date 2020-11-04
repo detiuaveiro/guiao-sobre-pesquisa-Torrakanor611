@@ -79,12 +79,12 @@ class STRIPS(SearchDomain):
     # list of applicable actions in a given "state"
     def actions(self, state):
         constants = state_constants(state)
-        operators = Operator.__subclasses__()
+        operators = Operator.__subclasses__()       # apartir das subclasses é que se gera ações concretas
         actions = []
         for op in operators:
-            lassign = assignments(op.args,constants)
+            lassign = assignments(op.args,constants)    # todas as combinãçoes das constantes às variàveis do operador, o mesmo operador da origem a x instancias diferentes
             for assign in lassign:
-                argvalues = [assign[a] for a in op.args]
+                argvalues = [assign[a] for a in op.args]    # tirar valores das variáveis
                 action = op.instanciate(argvalues)
                 if all(c in state for c in action.pc):
                     actions.append(action)
@@ -93,7 +93,9 @@ class STRIPS(SearchDomain):
     # Result of a given "action" in a given "state"
     # ( returns None, if the action is not applicable in the state)
     def result(self, state, action):
-        pass
+        # NovoEstado = Estado - efeitos neg + efeitos pos
+        state2 = [ c for state if not c in action.neg ]
+        return state2 + action.pos
 
     def cost(self, state, action):
         return 1
@@ -103,7 +105,7 @@ class STRIPS(SearchDomain):
 
     # Checks if a given "goal" is satisfied in a given "state"
     def satisfies(self, state, goal):
-        pass
+        return all(c in state for c in goal)
 
 
 
