@@ -35,17 +35,17 @@ def test_exercicio5(braga_faro):
     t = SearchTree(braga_faro, 'depth')
 
     assert t.search() == ['Braga', 'Porto', 'Agueda', 'Aveiro', 'Coimbra', 'Leiria', 'Castelo Branco', 'Santarem', 'Lisboa', 'Evora', 'Beja', 'Faro']
-    assert t.terminals == 18
-    assert t.non_terminals == 12
+    assert t.terminals == 19
+    assert t.non_terminals == 11
 
     t = SearchTree(braga_faro, 'depth')
 
     assert t.search(limit=9) == ['Braga', 'Porto', 'Agueda', 'Aveiro', 'Coimbra', 'Leiria', 'Santarem', 'Lisboa', 'Beja', 'Faro']
-    assert t.terminals == 11
-    assert t.non_terminals == 59 
+    assert t.terminals == 12
+    assert t.non_terminals == 58 
 
 def test_exercicio6(braga_faro):
     t = SearchTree(braga_faro, 'depth')
 
     assert t.search() == ['Braga', 'Porto', 'Agueda', 'Aveiro', 'Coimbra', 'Leiria', 'Castelo Branco', 'Santarem', 'Lisboa', 'Evora', 'Beja', 'Faro']
-    assert t.avg_ramification == 29/12
+    assert t.avg_branching == round((19+11-1)/11, 2) 
