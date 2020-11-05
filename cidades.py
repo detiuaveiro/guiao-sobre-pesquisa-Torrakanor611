@@ -42,15 +42,12 @@ class Cidades(SearchDomain):
 
     # 1.12
     def heuristic(self, city, goal_city):
-        
-        cost = self.cost(city, (city, goal_city))
+        if city == goal_city:
+            return 0
 
-        if cost == None:
-            city_coords = self.coordinates[city]
-            goal_city_coords = self.coordinates[goal_city]
-            return math.sqrt((goal_city_coords[1] - city_coords[1])**2 + (goal_city_coords[0] - city_coords[0])**2)
-        else:
-            return cost
+        y, x = self.coordinates[city]
+        y1, x1 = self.coordinates[goal_city]
+        return math.sqrt((y1 - y)*(y1 - y) + (x1 - x)*(x1 - x))
 
 
     def satisfies(self, city, goal_city):

@@ -67,6 +67,7 @@ class SearchNode:
         self.parent = parent
         self.depth = self.parent.depth + 1 if self.parent != None else 0     # 1.2
         self.cost = 0   # 1.7
+        self.heuristic = 0
     def __str__(self):
         return "no(" + str(self.state) + "," + str(self.parent) + ")"
     def __repr__(self):
@@ -102,17 +103,20 @@ class SearchTree:
             if self.problem.goal_test(node.state):
                 self.solution = node        # 1.3, estranho, python deixa criar atributos de classe fora do construtor
                 self.length = self.solution.depth
-                self.avg_ramification = (self.terminals + self.non_terminals -1) / self.non_terminals       # 1.6
+                self.terminals = len(self.open_nodes) + 1
+                # foi preciso arredondar
+                self.avg_branching = round((self.terminals + self.non_terminals -1) / self.non_terminals, 2)       # 1.6
                 self.cost = self.solution.cost  # 1.9
+                self.solution.heuristic = 0
                 # print(self.get_path(node))
                 return self.get_path(node)
+
+            self.non_terminals += 1
 
             if not limit == None and node.depth >= limit:      # 1.4
                 continue
             lnewnodes = []
-            # 1.5
-            self.terminals -= 1
-            self.non_terminals += 1
+            
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state, a)
                 if newstate not in self.get_path(node):         # 1.1, evitar ciclos, evitar que o algoritmo registe um nó com um state pelo qual já estivemos
@@ -121,8 +125,8 @@ class SearchTree:
                     newnode = SearchNode(newstate,node)
                     # print(newnode)
                     newnode.cost = node.cost + self.problem.domain.cost(node.state, a) # 1.8
+                    newnode.heuristic = self.problem.domain.heuristic(newnode.state, self.problem.goal)
                     lnewnodes.append(newnode)
-                    self.terminals += 1     # 1.5
             # print(lnewnodes)
             self.add_to_open(lnewnodes)
         return None
@@ -139,24 +143,17 @@ class SearchTree:
             self.open_nodes = sorted(self.open_nodes, key=sorter, reverse=False)
         # pesquisa greedy: a escolha do nó seguinte depende da menor heuristica(estimativa para atingir o resultado)
         elif self.strategy == "greedy": # 1.13
-            if len(self.open_nodes) == 0:
-                self.open_nodes.append(lnewnodes.pop())
+            self.open_nodes.extend(lnewnodes)
+            self.open_nodes = sorted(self.open_nodes, key= sorter_heuristic, reverse=False)
 
-            for newnode in lnewnodes:
-                newnode_heuristic_cost = self.problem.domain.heuristic(newnode.state, self.problem.goal)
-                for i in range(len(self.open_nodes)):
-                    if newnode_heuristic_cost < self.problem.domain.heuristic(self.open_nodes[i].state, self.problem.goal):
-                        self.open_nodes.insert(i, newnode)
-                        break
-
-
-    # 1.13
-    def sorter_heuristic(self, item):
-        return self.problem.domain.heuristic(item.state, (item.state, self.problem.goal))
 
 # 1.10
 def sorter(item):   # item is a node, wich is what's inside self.open_nodes
     return item.cost
+
+# 1.13
+def sorter_heuristic(item):
+    return item.heuristic
 
 
 
