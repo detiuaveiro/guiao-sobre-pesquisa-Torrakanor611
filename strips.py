@@ -94,8 +94,9 @@ class STRIPS(SearchDomain):
     # ( returns None, if the action is not applicable in the state)
     def result(self, state, action):
         # NovoEstado = Estado - efeitos neg + efeitos pos
-        state2 = [ c for state if not c in action.neg ]
-        return state2 + action.pos
+        # state2 = [ c for state if not c in action.neg ]
+        # return state2 + action.pos
+        pass
 
     def cost(self, state, action):
         return 1

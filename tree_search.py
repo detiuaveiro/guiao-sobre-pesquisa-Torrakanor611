@@ -145,6 +145,9 @@ class SearchTree:
         elif self.strategy == 'greedy': # 1.13
             self.open_nodes.extend(lnewnodes)
             self.open_nodes = sorted(self.open_nodes, key= sorter_heuristic, reverse=False)
+        elif self.strategy == "a*":
+            self.open_nodes.extend(lnewnodes)
+            self.open_nodes = sorted(self.open_nodes, key= sorter_astar)
 
 
 # 1.10
@@ -154,6 +157,10 @@ def sorter(item):   # item is a node, wich is what's inside self.open_nodes
 # 1.13
 def sorter_heuristic(item):
     return item.heuristic
+
+# 1.14
+def sorter_astar(item):
+    return item.cost + item.heuristic
 
 
 
