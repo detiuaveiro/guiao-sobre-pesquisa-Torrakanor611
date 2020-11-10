@@ -142,7 +142,7 @@ class SearchTree:
             self.open_nodes.extend(lnewnodes)
             self.open_nodes = sorted(self.open_nodes, key=sorter, reverse=False)
         # pesquisa greedy: a escolha do nó seguinte depende da menor heuristica(estimativa para atingir o resultado)
-        elif self.strategy == "greedy": # 1.13
+        elif self.strategy == 'greedy': # 1.13
             self.open_nodes.extend(lnewnodes)
             self.open_nodes = sorted(self.open_nodes, key= sorter_heuristic, reverse=False)
 
