@@ -14,13 +14,14 @@ class ConstraintSearch:
     def __init__(self,domains,constraints):
         self.domains = domains
         self.constraints = constraints
-
+        self.calls = 0
 
     # domains é um dicionário com os domínios actuais
     # de cada variável
     # ( ver acetato "Pesquisa com propagacao de restricoes
     #   em problemas de atribuicao - algoritmo" )
     def search(self,domains=None):
+        self.calls += 1 
         
         if domains==None:
             domains = self.domains
