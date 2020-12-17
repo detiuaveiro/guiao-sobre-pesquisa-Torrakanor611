@@ -134,9 +134,6 @@ print("greedy:" + str(t.search()))
 print("cost: " + str(t.cost))
 print("terminal nodes:" + str(t.terminals))
 
-# dúvida interpretar os resultados, mesmo caminho, cost diferente?
-
-
 
 # Atalho para obter caminho de c1 para c2 usando strategy:
 def search_path(c1,c2,strategy):

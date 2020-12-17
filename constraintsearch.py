@@ -35,10 +35,10 @@ class ConstraintSearch:
             # se valores violam restricoes, falha
             # ( verificacao desnecessaria se for feita a propagacao
             #   de restricoes )
-            for (var1,var2) in self.constraints:
-                constraint = self.constraints[var1,var2]
-                if not constraint(var1,domains[var1][0],var2,domains[var2][0]):
-                    return None 
+            # for (var1,var2) in self.constraints:
+            #     constraint = self.constraints[var1,var2]
+            #     if not constraint(var1,domains[var1][0],var2,domains[var2][0]):
+            #         return None 
             return { v:lv[0] for (v,lv) in domains.items() }
        
         # continuação da pesquisa
@@ -48,9 +48,25 @@ class ConstraintSearch:
                 for val in domains[var]:
                     newdomains = dict(domains)
                     newdomains[var] = [val]
+                    ledges = [e for e in self.constraints.keys() if e[1] == var]
+                    newdomains = self.constraint_propagation(newdomains, ledges)
                     solution = self.search(newdomains)
                     if solution != None:
                         return solution
         return None
+
+    def constraint_propagation(self, domains, ledges):
+        while ledges != []:
+            (xj, xi) = ledges.pop(0)
+            values = []
+            for y in domains[xj]:
+                constraint = self.constraints[xj, xi]
+                if any(constraint(xj, y, xi, z) for z in domains[xi]): #basta ahaver um z que o y pode ficar
+                    values.append(y)
+            if len(values) < len(domains[xj]):
+                domains[xj] = values
+                newedges = [e for e in self.constraints.keys() if e[1] == xj]
+                ledges.extend(newedges)
+        return domains
 
 
